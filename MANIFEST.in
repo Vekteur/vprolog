@@ -1,0 +1,3 @@
+include vprolog/prolog.lark
+include vprolog/data/*
+include examples/*

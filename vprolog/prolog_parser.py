@@ -1,6 +1,10 @@
+import pkg_resources
+
 from lark import Lark, Transformer, v_args
 from lark.indenter import Indenter
-from prolog_structures import Rule, Predicate, Variable, Atom, Number, List, Conjunction, Disjunction
+
+from .prolog_structures import (Atom, Conjunction, Disjunction, List, Number,
+                               Predicate, Rule, Variable)
 
 class TreeToProlog(Transformer):
 	program = list
@@ -26,11 +30,11 @@ class TreeToProlog(Transformer):
 	sum_ = product = exponent = term
 
 	@v_args(inline=True)
-	def predicate(self, relation, terms=[]):
-		return Predicate(relation, terms)
+	def predicate(self, relation, terms):
+		return Predicate(relation, [] if terms is None else terms)
 	@v_args(inline=True)
-	def list_(self, terms=[], tail=None):
-		return List(terms, tail)
+	def list_(self, terms, tail):
+		return List([] if terms is None else terms, tail)
 	@v_args(inline=True)
 	def variable(self, value):
 		return Variable(value.value)
@@ -43,8 +47,9 @@ class TreeToProlog(Transformer):
 		return Number(value.value)
 
 class PrologParser:
-	def __init__(self, start = 'program'):
-		self.lark_parser = Lark.open('src/prolog.lark', parser='lalr', \
+	def __init__(self, start='program'):
+		grammar_path = pkg_resources.resource_filename('vprolog', 'prolog.lark')
+		self.lark_parser = Lark.open(grammar_path, parser='lalr', \
 			start=start, transformer=TreeToProlog())
 	def parse(self, expression):
 		return self.lark_parser.parse(expression)

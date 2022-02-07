@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class Rule:
 	def __init__(self, head, body):
 		self.head = head
@@ -42,6 +43,9 @@ class PredicateID:
 class Predicate:
 	def __init__(self, relation, terms):
 		self.relation = relation
+		#print(relation)
+		#print(terms)
+		#assert terms is not None
 		self.terms = terms
 	def __str__(self):
 		str_rel = str(self.relation)

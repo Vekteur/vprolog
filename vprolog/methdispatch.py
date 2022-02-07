@@ -1,5 +1,6 @@
 from functools import singledispatch, update_wrapper
 
+
 # Source : https://stackoverflow.com/questions/24601722/how-can-i-use-functools-singledispatch-with-instance-methods
 def methdispatch(func):
     dispatcher = singledispatch(func)

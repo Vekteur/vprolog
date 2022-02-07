@@ -1,5 +1,7 @@
-from prolog_structures import Rule, Disjunction, Conjunction, Predicate, Variable, List, Constant
-from methdispatch import methdispatch
+from .methdispatch import methdispatch
+from .prolog_structures import (Conjunction, Constant, Disjunction, List,
+                               Predicate, Rule, Variable)
+
 
 class Substitution:
 	def __init__(self):

@@ -1,9 +1,12 @@
-from prolog_structures import Rule, Predicate, Variable, Atom, Number, List, Conjunction, Disjunction
-from prolog_operator import operators
-from substitution import Substitution, unify, substitute
 from collections import defaultdict
 from functools import singledispatch
-from methdispatch import methdispatch
+
+from .methdispatch import methdispatch
+from .prolog_operator import operators
+from .prolog_structures import (Atom, Conjunction, Disjunction, List, Number,
+                               Predicate, Rule, Variable)
+from .substitution import Substitution, substitute, unify
+
 
 class Inference:
 	def __init__(self, kb):
@@ -40,7 +43,7 @@ class Inference:
 		def _(x):
 			if x.value in new_names:
 				return Variable(new_names[x.value])
-			id = "_g" + str(self.next_var_id())
+			id = '_g' + str(self.next_var_id())
 			if x.value != '_':
 				new_names[x.value] = id
 			return Variable(id)
@@ -63,7 +66,7 @@ class Inference:
 	def resolve_conjunction(self, goal, subst, depth, index):
 		goals = goal.terms
 		if self.cut_depth is not None or subst is None:
-			return
+			return None
 		elif index == len(goals):
 			yield subst
 		else:
@@ -99,7 +102,7 @@ class Inference:
 		if goal in subst:
 			yield from self.resolve(subst[goal], subst, depth)
 		else:
-			raise RuntimeError('Calling uninstantied variable')
+			raise RuntimeError('Calling uninstantiated variable')
 
 	def __call__(self, goals):
 		self.cut_depth = None

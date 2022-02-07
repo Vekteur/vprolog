@@ -29,13 +29,14 @@ request: "?-" disjunction "."
 ?op : main_op | sum_op | product_op | exponent_op | predicate_op
 
 predicate: (atom | op) [ "(" [ term_list ] ")" ]
-list_: "[" [ term_list [ "|" (list_ | variable) ] ] "]"
+list_: "[" [ term_list [ "|" tail ] ] "]"
+?tail: list_ | variable
 term_list: term ("," term)*
 
 variable: /[A-Z_]\w*/
 atom: /[a-z]\w*/
 number: /[+-]?[1-9]\d*|0/
-_COMMENT: "%" /[^\n$]*[\n$]/
+_COMMENT: "%" /[^\n]*/
 
 %import common.WS
 

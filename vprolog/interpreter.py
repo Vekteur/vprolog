@@ -1,20 +1,22 @@
-from prolog_parser import PrologParser
-from inference import Inference
-from copy import deepcopy
-import sys
+import pkg_resources
+from pathlib import Path
+
 import lark
 
-def read(file):
-	with open(file) as f:
+from .inference import Inference
+from .prolog_parser import PrologParser
+
+
+def read(path):
+	with open(path) as f:
 		return f.read()
 
 class Interpreter:
-	builtin_file = 'data/builtin.pl'
-
-	def __init__(self, input_file):
+	def __init__(self, input_path):
 		program_parser = PrologParser()
 		self.request_parser = PrologParser('request')
-		program = program_parser.parse(read(Interpreter.builtin_file) + read(input_file))
+		builtin_path = Path(pkg_resources.resource_filename('vprolog', 'data/builtin.pl'))
+		program = program_parser.parse(read(builtin_path) + read(input_path))
 		self.inference = Inference(program)
 
 	def process_request(self, request):
@@ -40,9 +42,9 @@ class Interpreter:
 			try:
 				request = self.request_parser.parse(prefix + str_request)
 			except lark.exceptions.LarkError:
-				print('Error : invalid syntax')
+				print('Error: invalid syntax')
 				continue
 			try:
 				self.process_request(request)
 			except RecursionError:
-				print('Error : stack overflow')
+				print('Error: stack overflow')

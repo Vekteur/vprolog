@@ -1,6 +1,7 @@
 import operator
-from prolog_structures import Predicate, PredicateID, Variable, Atom, Number
-from substitution import unify
+
+from .prolog_structures import Atom, Number, Predicate, PredicateID, Variable
+from .substitution import unify
 
 operators = {}
 
